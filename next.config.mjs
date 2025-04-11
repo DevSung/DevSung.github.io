@@ -13,6 +13,7 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export', // 정적 사이트 생성
   eslint: {
     ignoreDuringBuilds: true,
   },
