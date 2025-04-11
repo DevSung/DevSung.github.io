@@ -13,17 +13,10 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: false,
+    output: 'export', // 정적 파일 모드 활성화
     images: {
-        unoptimized: true, // 이미지 정상적으로 불러올 수 있도록함
+        unoptimized: true, // 이미지 최적화 비활성화
     },
-    compiler: {
-        styledComponents: true, // styled-components 사용 시 컴파일러에 추가
-    },
-}
-
-module.exports = {
-    assetPrefix: ".",
 };
 
 if (userConfig) {
