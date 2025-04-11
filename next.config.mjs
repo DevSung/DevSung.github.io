@@ -1,52 +1,44 @@
 let userConfig = undefined
 try {
-  // try to import ESM first
-  userConfig = await import('./v0-user-next.config.mjs')
+    // try to import ESM first
+    userConfig = await import('./v0-user-next.config.mjs')
 } catch (e) {
-  try {
-    // fallback to CJS import
-    userConfig = await import("./v0-user-next.config");
-  } catch (innerError) {
-    // ignore error
-  }
+    try {
+        // fallback to CJS import
+        userConfig = await import("./v0-user-next.config");
+    } catch (innerError) {
+        // ignore error
+    }
 }
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // 정적 사이트 생성
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  images: {
-    unoptimized: true,
-  },
-  experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
-  },
+    reactStrictMode: false,
+    images: {
+        unoptimized: true, // 이미지 정상적으로 불러올 수 있도록함
+    },
+    compiler: {
+        styledComponents: true, // styled-components 사용 시 컴파일러에 추가
+    },
 }
 
 if (userConfig) {
-  // ESM imports will have a "default" property
-  const config = userConfig.default || userConfig
+    // ESM imports will have a "default" property
+    const config = userConfig.default || userConfig
 
-  for (const key in config) {
-    if (
-      typeof nextConfig[key] === 'object' &&
-      !Array.isArray(nextConfig[key])
-    ) {
-      nextConfig[key] = {
-        ...nextConfig[key],
-        ...config[key],
-      }
-    } else {
-      nextConfig[key] = config[key]
+    for (const key in config) {
+        if (
+            typeof nextConfig[key] === 'object' &&
+            !Array.isArray(nextConfig[key])
+        ) {
+            nextConfig[key] = {
+                ...nextConfig[key],
+                ...config[key],
+            }
+        } else {
+            nextConfig[key] = config[key]
+        }
     }
-  }
 }
 
 export default nextConfig
